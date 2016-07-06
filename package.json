@@ -8,6 +8,8 @@
   },
   "dependencies": {
     "express": "*",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
     "pg-promise": "^5.1.0"
   },
   "devDependencies": {
