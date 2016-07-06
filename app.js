@@ -47,14 +47,15 @@ app.post('/api/register', function (req, res) {
 			    	db.query("INSERT INTO users (email, password, name) VALUES ($1, $2, $3)",
 			    		[req.body.email, req.body.password, req.body.username]);
 
-			    	db.any("SELECT * FROM users")
-						.then(function (users) {				
-						    console.log("users:", users);
-						});
 			    	console.log('new user has been added');
-			    	res.status(201).send('registration succeeded');
+
+			    	db.any("SELECT id FROM users WHERE email = $1", req.body.email)
+						.then(function (id) {	
+							res.status(201).end('registration succeeded');							   
+						});		    	
+			    	
 			    } else {
-			    	res.status(400).send('email is used');
+			    	res.status(400).end('email is used');
 			    }
 			})
 			.catch(function (error) {
