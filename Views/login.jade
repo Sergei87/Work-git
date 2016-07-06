@@ -1,0 +1,16 @@
+html
+  head
+    title!= title
+  body
+    h1!= message
+
+    form(action="/api/login" method="post")
+        div
+            label Email:
+            input(type="text" name="email")
+        div
+            label Password:
+            input(type="password" name="password")
+        div
+            input(type="submit" value="Register")
+        

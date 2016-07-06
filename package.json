@@ -7,6 +7,7 @@
     "test": "node_modules/mocha/bin/mocha --recursive"
   },
   "dependencies": {
+    "body-parser": "^1.15.2",
     "express": "*",
     "jade": "^1.11.0",
     "passport": "^0.3.2",
