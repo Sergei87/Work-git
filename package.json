@@ -10,6 +10,7 @@
     "body-parser": "^1.15.2",
     "express": "*",
     "jade": "^1.11.0",
+    "migrate": "^0.2.3",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "pg-promise": "^5.1.0"
