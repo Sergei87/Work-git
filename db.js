@@ -11,5 +11,6 @@ db.any("SELECT * FROM users")
     console.log("ERROR: ", error);
 });
 
-
- module.exports = db;
+module.exports = db;
+	
+			 
