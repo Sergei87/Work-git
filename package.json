@@ -8,12 +8,16 @@
   },
   "dependencies": {
     "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
+    "cookie-session": "^2.0.0-alpha.1",
     "express": "*",
+    "express-session": "^1.14.0",
     "jade": "^1.11.0",
     "migrate": "^0.2.3",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
-    "pg-promise": "^5.1.0"
+    "pg-promise": "^5.1.0",
+    "req-flash": "0.0.3"
   },
   "devDependencies": {
     "chai": "^3.5.0",

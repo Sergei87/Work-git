@@ -18,15 +18,18 @@ app.set('view engine', 'jade');
 app.set('port', 3000);
 app.get('/', function (req, res) {
 	console.log("Express server listening on port " + app.get('port'));
+	res.send('This is home page');
 	
 });
 
 app.get('/register', function (req, res) {	
 	res.render('register', { title: 'Form', message: 'Hello there!'});
+
 });
 
 app.get('/login', function (req, res) {	
 	res.render('login', { title: 'Form', message: 'Hello there!'});
+
 });
 app.listen(3000);
 
@@ -69,7 +72,7 @@ let registration = (req, res) => {
 				res.status(401).send(error);
 		})		
 			
-}
+};
 
 //add to db function
 app.post('/api/register', function (req, res, next) {
@@ -94,11 +97,65 @@ app.post('/api/register', function (req, res) {
 	showSuccessMess(req, res);			
 	
 });
-	
-app.post('/api/login', function (req, res) {
-	console.log("/api/login");
-	res.send("200 OK");
-});
+
+
+let passport = require('passport');
+let LocalStrategy = require('passport-local').Strategy;
+let cookieParser = require('cookie-parser');
+let session = require('express-session');
+let flash = require('req-flash');
+
+
+app.use(cookieParser());
+app.use(session({ secret: '123' }));
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use('login', new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password',
+    passReqToCallback: true,
+  },  function (req, username, password, done) {
+  	 console.log("Login process:", username);
+  	db.any("SELECT * FROM users WHERE email = $1 AND password = $2", [username, password])
+      .then((user)=> {      
+      	if (user.length == 0) {
+      		return done(null, false, { message: 'Incorrect username.' });
+      	}
+      
+      	return done(null, user);
+
+      })
+      .catch((err) => {       
+        done(null, false, { message: 'Incorrect username or password.' });
+      });
+   
+}));
+
+passport.serializeUser((user, done)=>{
+   console.log("serialize ", user);
+    done(null, user[0].id);
+  });
+
+  passport.deserializeUser((id, done)=>{
+    console.log("deserualize ", id);
+    db.one("SELECT id, name, email FROM users " +
+            "WHERE id = $1", [id])
+    .then((user)=>{
+      done(null, user);
+    })
+    .catch((err)=>{
+      done(new Error('User with the id ${id} does not exist'));
+    })
+  });
+
+app.post('/api/login',
+  passport.authenticate('login', { successRedirect: '/',
+                                   failureRedirect: '/login',
+                                   failureFlash: true }) 							
+);
+
 
 
 module.exports = app;
